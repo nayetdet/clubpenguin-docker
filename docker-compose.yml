@@ -1,0 +1,65 @@
+services:
+  client:
+    build:
+      context: .
+      dockerfile: ./docker/yukon/Dockerfile
+    container_name: yukon_client
+    ports:
+      - "8080:8080"
+    depends_on:
+      - server
+    restart: unless-stopped
+
+  server:
+    build:
+      context: .
+      dockerfile: ./docker/yukon-server/Dockerfile
+      args:
+        MYSQL_HOST: mysql
+        MYSQL_USER: ${MYSQL_USER}
+        MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+        MYSQL_DATABASE: ${MYSQL_DATABASE}
+    container_name: yukon_server
+    ports:
+      - "6111:6111"
+      - "6112:6112"
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+    depends_on:
+      - mysql
+    restart: unless-stopped
+
+  mysql:
+    image: mysql:8.0
+    container_name: yukon_mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+    volumes:
+      - ./submodules/yukon-server/yukon.sql:/docker-entrypoint-initdb.d/init.sql:ro
+      - yukon_mysql_data:/var/lib/mysql
+    restart: unless-stopped
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: yukon_phpmyadmin
+    ports:
+      - "8888:80"
+    environment:
+      PMA_HOST: mysql
+      PMA_USER: ${MYSQL_USER}
+      PMA_PASSWORD: ${MYSQL_PASSWORD}
+    depends_on:
+      - mysql
+    restart: unless-stopped
+
+volumes:
+  yukon_mysql_data:
+  yukon_phpmyadmin_data:

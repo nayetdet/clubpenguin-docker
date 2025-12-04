@@ -1,0 +1,9 @@
+[submodule "submodules/yukon"]
+	path = submodules/yukon
+	url = https://github.com/wizguin/yukon
+[submodule "submodules/yukon-server"]
+	path = submodules/yukon-server
+	url = https://github.com/wizguin/yukon-server
+[submodule "submodules/assets"]
+	path = submodules/assets
+	url = https://gitgud.io/piefruit/assets
