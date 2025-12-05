@@ -17,7 +17,7 @@ RUN apt-get update \
         --arg password "$MYSQL_PASSWORD" \
         --arg database "$MYSQL_DATABASE" \
         '.database.host = $host | .database.user = $user | .database.password = $password | .database.database = $database' \
-        ./config/config_example.json > ./config/config.json ; \
+        ./config/config_example.json > ./config/config.json \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
