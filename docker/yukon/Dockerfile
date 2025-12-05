@@ -10,4 +10,4 @@ RUN mkdir -p ./assets \
     && rm -rf /tmp/assets
 
 EXPOSE 8080
-CMD ["npx", "webpack", "serve", "--host", "0.0.0.0", "--port", "8080"]
+CMD ["npx", "webpack", "serve", "--host", "0.0.0.0", "--port", "8080", "--allowed-hosts", "all"]
